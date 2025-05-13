@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import admin from "firebase-admin";
-import { db } from "@/lib/firebaseAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 // **Middleware untuk autentikasi**
 async function verifyUser(req: NextRequest) {
@@ -34,7 +34,7 @@ export async function PUT(
             return NextResponse.json({ error: "Title and text are required" }, { status: 400 });
         }
 
-        const noteRef = db.collection("users").doc(uid).collection("notes").doc(noteId);
+        const noteRef = adminDb.collection("users").doc(uid).collection("notes").doc(noteId);
         const noteSnap = await noteRef.get();
 
         if (!noteSnap.exists) {
@@ -67,7 +67,7 @@ export async function DELETE(
             return NextResponse.json({ error: "note id not found", message: noteId }, { status: 404 });
         }
 
-        const noteRef = db.collection("users").doc(uid).collection("notes").doc(noteId);
+        const noteRef = adminDb.collection("users").doc(uid).collection("notes").doc(noteId);
         const noteSnap = await noteRef.get();
 
         if (!noteSnap.exists) {

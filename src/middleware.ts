@@ -34,13 +34,13 @@ export function middleware(req: NextRequest) {
 
 
     // firebase
-    const token = req.cookies.get('firebase-auth-token'); // Sesuaikan dengan cara menyimpan token
+    // const token = req.cookies.get('firebase-auth-token'); // Sesuaikan dengan cara menyimpan token
 
-    if (!token) {
-        return NextResponse.redirect(new URL('/sign-in', req.url));
-    }
+    // if (!token) {
+    //     return NextResponse.redirect(new URL('/sign-in', req.url));
+    // }
 
-    return NextResponse.next();
+    // return NextResponse.next();
 }
 
 export const config = {

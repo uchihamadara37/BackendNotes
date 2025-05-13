@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebaseAdmin";
+import { adminDb, adminAuth } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
 
@@ -13,11 +13,11 @@ export async function GET(req: Request) {
 
     try {
         // Verifikasi token dan dapatkan UID
-        const decodedToken = await admin.auth().verifyIdToken(token);
+        const decodedToken = await adminAuth.verifyIdToken(token);
         const uid = decodedToken.uid;
 
         // Ambil catatan milik user ini
-        const notesRef = db.collection("users").doc(uid).collection("notes");
+        const notesRef = adminDb.collection("users").doc(uid).collection("notes");
         const snapshot = await notesRef.get();
 
         const notes = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
             updatedAt: new Date().toISOString(),
         };
 
-        const docRef = await db.collection("users").doc(uid).collection("notes").add(newNote);
+        const docRef = await adminDb.collection("users").doc(uid).collection("notes").add(newNote);
 
         return NextResponse.json({ id: docRef.id, ...newNote });
     } catch (error) {
